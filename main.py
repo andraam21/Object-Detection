@@ -1,22 +1,20 @@
 import yolo as y
 import hog as h
-import logging
 import threading
 import time
+import cv2
 
-# apply the first detection
-def first_thread():
-    print("First thread")
-    yolo.apply_detection('people.mp4')
+# capture the video
+video_name = 'people.mp4'
+cap = cv2.VideoCapture(video_name)
 
-# apply the second detection
-def second_thread():
-    print("Second thread")
-    hog.apply_detection('people.mp4')
+# applying simultaneously the two filters
+while True:
+    ret, frame = cap.read()
+    y.Yolo_Detection.apply_detection(frame)
+    h.Hog_Detection.apply_detection(frame)
 
-# starts the two parallel threads
-if __name__ == '__main__':
-    yolo = y.Yolo_Detection
-    hog = h.Hog_Detection
-    threading.Thread(target = first_thread).start()
-    threading.Thread(target = second_thread).start()
+# releasing the video and closing the tabs
+cap.release()
+cv.destroyAllWindows()
+cv.waitKey(0)
